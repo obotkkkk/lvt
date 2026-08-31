@@ -131,9 +131,6 @@ public class SchematicPlacingUtils {
         return allSuccess;
     }
 
-    /*
-     * WARNING - void declaration
-     */
     public static boolean placeBlocksWithinChunk(class_1937 world, class_1923 chunkPos, String regionName, LitematicaBlockStateContainer container, Map<class_2338, class_2487> blockEntityMap, class_2338 origin, SchematicPlacement schematicPlacement, SubRegionPlacement placement, @Nullable Map<class_2338, class_6760<class_2248>> scheduledBlockTicks, @Nullable Map<class_2338, class_6760<class_3611>> scheduledFluidTicks, ReplaceBehavior replace, PasteLayerBehavior layerBehavior, boolean notifyNeighbors) {
         int y;
         IntBoundingBox bounds = schematicPlacement.getBoxWithinChunkForRegion(regionName, chunkPos.field_9181, chunkPos.field_9180);
@@ -181,12 +178,13 @@ public class SchematicPlacingUtils {
         for (y = 0; y <= endY; ++y) {
             for (int z = startZ; z <= endZ; ++z) {
                 for (int x = startX; x <= endX; ++x) {
-                    void var43_54;
+                    class_2487 var43_54;
                     class_2586 te;
                     Object state = container.get(x, y, z);
                     if (state.method_26204() == class_2246.field_10369) continue;
                     posMutable.method_10103(x, y, z);
                     class_2487 class_24872 = blockEntityMap.get(posMutable);
+                    var43_54 = class_24872;
                     class_2338 origPos = posMutable.method_10062();
                     posMutable.method_10103(posMinRelMinusRegX + x, posMinRelMinusRegY + y, posMinRelMinusRegZ + z);
                     class_2338 pos = PositionUtils.getTransformedPlacementPosition((class_2338)posMutable, schematicPlacement, placement);
@@ -396,4 +394,3 @@ public class SchematicPlacingUtils {
         return DataManager.getRenderLayerRange().isPositionWithinRange((int)pos.method_10216(), (int)pos.method_10214(), (int)pos.method_10215());
     }
 }
-
