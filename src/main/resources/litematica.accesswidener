@@ -1,0 +1,5 @@
+accessWidener	v2	intermediary
+accessible	method	net/minecraft/class_2246	method_63053	(Lnet/minecraft/class_5321;Ljava/util/function/Function;Lnet/minecraft/class_4970$class_2251;)Lnet/minecraft/class_2248;
+accessible	field	net/minecraft/class_287	field_1556	Z
+accessible	field	net/minecraft/class_4970$class_2251	field_54006	Lnet/minecraft/class_5321;
+accessible	field	net/minecraft/class_773	field_4162	Ljava/util/Map;

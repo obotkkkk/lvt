@@ -1,0 +1,81 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+repositories {
+	// malilib is not published under a well-known, stable Maven coordinate that
+	// could be verified while preparing this project, so it is bundled as a
+	// local jar file under libs/ instead (see README.md "Malilib" section).
+	// If you'd rather pull it from masa's maven repo, uncomment below and set
+	// the correct artifact coordinate for malilib fabric 1.21.4:
+	// maven {
+	//     name = "masa"
+	//     url = 'https://masa.dy.fi/maven'
+	// }
+	flatDir {
+		dirs 'libs'
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+	// IMPORTANT: this project's decompiled source uses raw Fabric intermediary
+	// identifiers (class_310, method_7353, field_1724, ...) instead of readable
+	// Yarn ("named") identifiers. Using the intermediary mappings artifact here
+	// (instead of the usual loom.officialMojangMappings() / Yarn) makes Loom's
+	// compile classpath expose Minecraft under those same class_XXX/method_XXX/
+	// field_XXX names, so the source compiles unmodified.
+	//
+	// If Loom refuses this (some versions require a mapping file with a
+	// "named" namespace distinct from "intermediary"), see README.md for the
+	// fallback approach (compiling against Yarn and renaming identifiers, or
+	// generating a trivial identity "named" layer on top of intermediary).
+	mappings "net.fabricmc:intermediary:${project.minecraft_version}:v2"
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// malilib — required at compile time because Litematica code (fi.dy.masa.litematica.*)
+	// references fi.dy.masa.malilib.* classes. Drop the real malilib-fabric-1.21.4 jar
+	// (matching the version in your crash log: 0.23.5) into libs/ before building.
+	// See README.md for exactly where to get this file.
+	modCompileOnly name: 'malilib-fabric-1.21.4-0.23.5'
+	modRuntimeOnly name: 'malilib-fabric-1.21.4-0.23.5'
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/litematica.accesswidener")
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 21
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+	withSourcesJar()
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		// Add a repository here if you want to publish this build somewhere.
+	}
+}

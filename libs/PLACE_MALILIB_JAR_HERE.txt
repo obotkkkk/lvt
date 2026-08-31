@@ -1,0 +1,18 @@
+Bỏ file malilib-fabric-1.21.4-*.jar vào thư mục này trước khi build.
+
+Cách lấy file:
+1. Cách dễ nhất: lấy trực tiếp file malilib .jar mà bạn đã có trong thư mục
+   mods/ của TLauncher/game (log crash cho thấy bạn đang chạy malilib 0.23.5
+   cho MC 1.21.4). Copy file đó vào đây và đổi tên thành:
+       malilib-fabric-1.21.4-0.23.5.jar
+   (phải khớp đúng tên đã khai trong build.gradle, dòng
+   `modCompileOnly name: 'malilib-fabric-1.21.4-0.23.5'`
+   — nếu bạn dùng tên file khác, sửa lại dòng đó trong build.gradle cho khớp)
+
+2. Hoặc tải từ Modrinth/CurseForge trang chính thức của malilib, chọn đúng
+   version cho Fabric 1.21.4, bản 0.23.5.
+
+Vì sao cần file này: code của Litematica (fi.dy.masa.litematica.*) gọi rất
+nhiều class trong fi.dy.masa.malilib.* (145 file .java tham chiếu tới nó),
+nhưng malilib là một mod riêng, không nằm trong file .jar bạn upload — nên
+phải cung cấp nó làm dependency biên dịch thì Gradle mới build được.
